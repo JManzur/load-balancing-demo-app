@@ -90,7 +90,7 @@ docker run -d -p 5000:5000 --name DEMO-LB-APP {IMAGE_ID}
 
 ## Author
 
-- [@jmanzur](https://github.com/JManzur)
+- [@JManzur](https://jmanzur.com.ar)
 
   
 ## Documentation
