@@ -55,16 +55,16 @@ And you will see something like this:
 In order to test the healthcheck status page, you can access http://127.0.0.1:5000/status in a browser or perform a curl like this:
 
 ```bash
-  curl http://127.0.0.1:5000/status
+  curl -s http://127.0.0.1:5000/status
 ```
 
-:bulb: **TIP**: Use "python -m json.tool" to prettify the json output
+:bulb: **TIP**: Use "python3 -m json.tool" to prettify the json output
 
 ```bash
   curl -s http://127.0.0.1:5000/status | python3 -m json.tool
 ```
 
-![App Screenshot](https://1.bp.blogspot.com/-GM2nkXXTSkY/YMu4IJoFQmI/AAAAAAAAFko/iS6AtNOx-YYmrNIFbzHasOCPZ3iNuxYwACLcBGAsYHQ/s16000/flask-demo-healthcheck.png)
+![App Screenshot](./demo-lb-app-status.png)
 
 ## Build the Docker image 
 
