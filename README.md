@@ -2,12 +2,9 @@
 
 Why do all demo apps have to be ugly? I don't want any blank page with off-center black text. Let's use something pretty!
 
-This is a simple Flask APP that runs in a Docker container and you can use it to test load balancing. The useful part for testing load balancing is that this app returns the hostname of the container it is running in, so you can confirm that your load balancing setup is working.
+This is a simple Flask APP that runs in a Docker container and you can use it to test load balancing. The useful part for testing load balancing is that this app returns the hostname of the container it is running on, so you can confirm that your load balancing setup is working.
 
 This app also includes a status page to test healthcheck.
-
-## High-level diagram:
-
 
 ## Tested with: 
 
@@ -48,7 +45,7 @@ http://127.0.0.1:5000/
 
 And you will see something like this:
 
-![App Screenshot](./demo-lb-app.png)
+![App Screenshot](./images/lb_demo_app.png)
 
 ## Test the healthcheck status page
 
@@ -64,7 +61,7 @@ In order to test the healthcheck status page, you can access http://127.0.0.1:50
   curl -s http://127.0.0.1:5000/status | python3 -m json.tool
 ```
 
-![App Screenshot](./demo-lb-app-status.png)
+![App Screenshot](./images/lb_demo_app_status.png)
 
 ## Build the Docker image 
 
@@ -90,10 +87,9 @@ docker run -d -p 5000:5000 --name DEMO-LB-APP {IMAGE_ID}
 
 ## Author
 
-- [@JManzur](https://jmanzur.com.ar)
+- [@JManzur](https://jmanzur.com)
 
   
 ## Documentation
 
 - [Python - Docker Official Images](https://hub.docker.com/_/python)
-- [py-healthcheck library](https://pypi.org/project/py-healthcheck/)

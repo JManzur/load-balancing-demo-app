@@ -1,24 +1,19 @@
-from flask import Flask, render_template
-from healthcheck import HealthCheck
-import urllib.request
+from flask import Flask, render_template, jsonify
 import socket
 
 app = Flask(__name__, static_url_path='/static')
-health = HealthCheck(app, "/status")
 
 hostname=(socket.gethostname())
-
-def demo_available():
-	code = urllib.request.urlopen("http://127.0.0.1:5000").getcode()
-	print(code)
-	if code == 200:
-		return True, "OK"
-	else:
-		return False, "ERROR"
         
-health.add_check(demo_available)
+@app.route('/status', methods=['GET'])
+def status():
+	return jsonify(
+		Healthy = True,
+		Host = hostname,
+		StatusCode = 200
+	), 200, {'ContentType':'application/json'}
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def index():
     return render_template(
         'index.html',
