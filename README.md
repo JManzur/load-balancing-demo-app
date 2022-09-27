@@ -6,9 +6,7 @@ This is a simple Flask APP that runs in a Docker container and you can use it to
 
 This app also includes a status page to test healthcheck.
 
-> ### [Also available on Docker Hub!](https://hub.docker.com/r/jmanzur/demo-lb-app)
->
-> <img alt="Docker Image Version (latest by date)" src="https://img.shields.io/docker/v/jmanzur/demo-lb-app?style=for-the-badge" herf="https://hub.docker.com/r/jmanzur/demo-lb-app">
+> #### :bulb: [Also available on Docker Hub!](https://hub.docker.com/r/jmanzur/demo-lb-app)
 
 
 ## Tested with: 
