@@ -10,7 +10,7 @@ This app also includes a status page to test healthcheck.
 
 | Environment | Application | Version  |
 | ----------------- |-----------|---------|
-| WSL2 Ubuntu 20.04 | Docker | 20.10.8  |
+| WSL2 Ubuntu 20.04 | Docker | 20.10.17  |
 | WSL2 Ubuntu 20.04 | Python | 3.9.5 |
 
 ## Run App.py Locally
@@ -18,13 +18,13 @@ This app also includes a status page to test healthcheck.
 Clone the project
 
 ```bash
-  git clone https://github.com/JManzur/load-balancing-demo-app.git
+git clone https://github.com/JManzur/load-balancing-demo-app.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd load-balancing-demo-app
+cd load-balancing-demo-app
 ```
 
 If you wish to test the python app locally, install the requirements:
