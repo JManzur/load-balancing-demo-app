@@ -3,7 +3,7 @@ version: '3.7'
 
 services:
   demo-lb-app:
-    image: jmanzur/demo-lb-app:v1.1
+    image: jmanzur/demo-lb-app:v1.2
     container_name: DEMO-LB-APP 
     restart: always
     ports:
