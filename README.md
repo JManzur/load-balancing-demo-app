@@ -44,7 +44,7 @@ Start the server
 
 Access the web app:
 
-http://127.0.0.1:5000/
+http://127.0.0.1:8882/
 
 And you will see something like this:
 
@@ -52,16 +52,16 @@ And you will see something like this:
 
 ## Test the healthcheck status page
 
-In order to test the healthcheck status page, you can access http://127.0.0.1:5000/status in a browser or perform a curl like this:
+In order to test the healthcheck status page, you can access http://127.0.0.1:8882/status in a browser or perform a curl like this:
 
 ```bash
-  curl -s http://127.0.0.1:5000/status
+  curl -s http://127.0.0.1:8882/status
 ```
 
 :bulb: **TIP**: Use "python3 -m json.tool" to prettify the json output
 
 ```bash
-  curl -s http://127.0.0.1:5000/status | python3 -m json.tool
+  curl -s http://127.0.0.1:8882/status | python3 -m json.tool
 ```
 
 ![App Screenshot](./images/lb_demo_app_status.png)
@@ -85,7 +85,7 @@ docker image ls
 
 Run the image
 ```bash
-docker run -d -p 5000:5000 --name DEMO-LB-APP {IMAGE_ID}
+docker run -d -p 8882:8882 --name DEMO-LB-APP {IMAGE_ID}
 ```
 
 ## Author

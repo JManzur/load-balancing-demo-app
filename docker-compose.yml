@@ -7,4 +7,4 @@ services:
     container_name: DEMO-LB-APP 
     restart: always
     ports:
-      - "5000:5000/tcp"
+      - "8882:8882/tcp"

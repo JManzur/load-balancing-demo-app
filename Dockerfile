@@ -10,5 +10,5 @@ COPY static/images/load-balancer-icon.png /usr/src/app/static/images/load-balanc
 COPY static/styles/normalize.css /usr/src/app/static/styles/normalize.css
 COPY static/styles/skeleton-dark.css /usr/src/app/static/styles/skeleton-dark.css 
 
-EXPOSE 5000
+EXPOSE 8882
 CMD ["python", "/usr/src/app/app.py"]
