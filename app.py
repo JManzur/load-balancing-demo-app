@@ -2,7 +2,10 @@ from flask import Flask, render_template, jsonify
 import socket
 from os import getenv
 
-APP_VERSION = getenv('APP_VERSION')
+if len(getenv('APP_VERSION')) == 0:
+    APP_VERSION = "V1.1"
+else:
+    APP_VERSION = getenv('APP_VERSION')
 
 if len(getenv('HOSTNAME')) == 0:
     HOSTNAME = socket.gethostname()
@@ -16,6 +19,7 @@ def status():
 	return jsonify(
 		Healthy = True,
 		Host = HOSTNAME,
+        AppVersion = APP_VERSION,
 		StatusCode = 200
 	), 200, {'ContentType':'application/json'}
 
