@@ -3,7 +3,7 @@ import socket
 from os import getenv
 
 if len(getenv('APP_VERSION')) == 0:
-    APP_VERSION = "V1.2"
+    APP_VERSION = "V1.3"
 else:
     APP_VERSION = getenv('APP_VERSION')
 
