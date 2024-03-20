@@ -1,10 +1,10 @@
 # Load Balancing Demo APP
 
-Why do all demo apps have to be ugly? I don't want any blank page with off-center black text. Let's use something pretty!
+Why do all demo apps have to be ugly? I don't want any white page with off-center black text. Let's use something prettier!
 
 This is a simple Flask APP that runs in a Docker container and you can use it to test load balancing. The useful part for testing load balancing is that this app returns the hostname of the container it is running on, so you can confirm that your load balancing setup is working.
 
-This app also includes a status page to test healthcheck.
+This app also includes a status page to test healthcheck, and a feature to show the "app version" in the footer, so you can test rolling updates.
 
 > #### :bulb: [Also available on Docker Hub!](https://hub.docker.com/r/jmanzur/demo-lb-app)
 
@@ -13,8 +13,8 @@ This app also includes a status page to test healthcheck.
 
 | Environment | Application | Version  |
 | ----------------- |-----------|---------|
-| WSL2 Ubuntu 20.04 | Docker | 20.10.17  |
-| WSL2 Ubuntu 20.04 | Python | 3.9.5 |
+| WSL2 Ubuntu 20.04 | Docker | 25.0.3  |
+| WSL2 Ubuntu 20.04 | Python | 3.10.12 |
 
 ## Run App.py Locally
 
@@ -55,15 +55,20 @@ And you will see something like this:
 In order to test the healthcheck status page, you can access http://127.0.0.1:8882/status in a browser or perform a curl like this:
 
 ```bash
-  curl -s http://127.0.0.1:8882/status
+curl -s http://127.0.0.1:8882/status
 ```
 
 :bulb: **TIP**: Use "python3 -m json.tool" to prettify the json output
 
 ```bash
-  curl -s http://127.0.0.1:8882/status | python3 -m json.tool
+curl -s http://127.0.0.1:8882/status | python3 -m json.tool
 ```
 
+:bulb: **TIP**: [jq](https://jqlang.github.io/jq/download/) also works great for this:
+
+```bash
+curl -s http://127.0.0.1:8882/status | jq -r
+```
 ![App Screenshot](./images/lb_demo_app_status.png)
 
 ## Build the Docker image 
@@ -87,6 +92,8 @@ Run the image
 ```bash
 docker run -d -p 8882:8882 --name DEMO-LB-APP {IMAGE_ID}
 ```
+
+:bulb: **TIP**: You can a
 
 ## Author
 

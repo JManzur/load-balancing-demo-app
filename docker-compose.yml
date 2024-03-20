@@ -3,8 +3,12 @@ version: '3.7'
 
 services:
   demo-lb-app:
-    image: jmanzur/demo-lb-app:v1.2
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: DEMO-LB-APP 
+    environment:
+      - APP_VERSION=2.0
     restart: always
     ports:
       - "8882:8882/tcp"
