@@ -3,6 +3,12 @@ name: Docker Build and Push
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - '**/README.md'
+      - 'images/**'
+      - 'kubernetes/**'
+      - 'scripts/**'
+
 env:
   IMAGE_NAME: demo-lb-app
 
