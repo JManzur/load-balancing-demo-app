@@ -93,13 +93,32 @@ Run the image
 docker run -d -p 8882:8882 --name DEMO-LB-APP {IMAGE_ID}
 ```
 
-:bulb: **TIP**: You can a
+:bulb: **TIP**: You can also use the ./rebuild_image.sh script to build and run the image in one step.
+
+## Run the Docker image in a EKS Kubernetes Cluster
+
+Deploy the pod, service and ingress resources to your EKS cluster:
+```bash
+kubectl apply -f https://raw.githubusercontent.com/JManzur/load-balancing-demo-app/main/k8s_deployment.yaml
+```
+
+Wait a few minutes for the load balancer to be created and then get the ingress endpoint:
+```bash
+kubectl get ingress/ingress-demo-lb-app -n demo-lb-app
+```
+
+To delete the resources run:
+```bash
+kubectl delete -f https://raw.githubusercontent.com/JManzur/load-balancing-demo-app/main/k8s_deployment.yaml
+```
+> :warning: NOTE: This deployment uses a LoadBalancer service type, so it will create a **PUBLIC** AWS ELB and you will be charged for it, also your eks cluster needs to have the correct permissions to create the ELB, and the ELB controller needs to be installed in your cluster.
 
 ## Author
 
 - [@JManzur](https://jmanzur.com)
 
-  
 ## Documentation
 
 - [Python - Docker Official Images](https://hub.docker.com/_/python)
+- [Install the AWS Load Balancer Controller add-on using Kubernetes Manifests](https://docs.aws.amazon.com/eks/latest/userguide/lbc-manifest.html)
+- [Application load balancing on Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html)

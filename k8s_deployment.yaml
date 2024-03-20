@@ -13,7 +13,7 @@ spec:
   selector:
     matchLabels:
       app.kubernetes.io/name: demo-lb-app
-  replicas: 5
+  replicas: 4
   template:
     metadata:
       labels:
@@ -25,7 +25,7 @@ spec:
         name: demo-lb-app
         env:
         - name: APP_VERSION
-          value: "1.0"
+          value: "1.1"
         ports:
         - containerPort: 8882
 ---
