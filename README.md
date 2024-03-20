@@ -95,11 +95,10 @@ docker run -d -p 8882:8882 --name DEMO-LB-APP {IMAGE_ID}
 
 :bulb: **TIP**: You can also use the `rebuild_image.sh` script located in the scripts directory to build and run the image.
 
-```bash
-
 ## Run the Docker image in a EKS Kubernetes Cluster
 
 Deploy the pod, service and ingress resources to your EKS cluster:
+
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/JManzur/load-balancing-demo-app/main/kubernetes/k8s_deployment.yaml
 ```
