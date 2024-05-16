@@ -1,0 +1,28 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- deployment.yaml
+- ingress.yaml
+- namespace.yaml
+- service.yaml
+
+namespace: demo-lb-app
+
+replicas:
+- count: 4
+  name: deployment-demo-lb-app
+
+images:
+- name: jmanzur/demo-lb-app:latest
+  newName: jmanzur/demo-lb-app
+  newTag: latest
+
+configMapGenerator:
+- literals:
+  - APP_VERSION=1.1
+  name: lb-app-cm
+
+labels:
+- includeSelectors: true
+  pairs:
+    owner: jmanzur

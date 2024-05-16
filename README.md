@@ -97,23 +97,13 @@ docker run -d -p 8882:8882 --name DEMO-LB-APP {IMAGE_ID}
 
 ## Run the Docker image in a EKS Kubernetes Cluster
 
-Deploy the pod, service and ingress resources to your EKS cluster:
+Go to the [kubernetes directory](./kubernetes) and apply the manifests:
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/JManzur/load-balancing-demo-app/main/kubernetes/k8s_deployment.yaml
+kubectl apply -f .
 ```
 
-Wait a few minutes for the load balancer to be created and then get the ingress endpoint:
-```bash
-kubectl get ingress/ingress-demo-lb-app -n demo-lb-app
-```
-
-To delete the resources run:
-```bash
-kubectl delete -f https://raw.githubusercontent.com/JManzur/load-balancing-demo-app/main/kubernetes/k8s_deployment.yaml
-```
-> :warning: NOTE: This deployment uses a LoadBalancer service type, so it will create a **PUBLIC** AWS ELB and you will be charged for it, also your eks cluster needs to have the correct permissions to create the ELB, and the ELB controller needs to be installed in your cluster.
-
+For more information and tips on how to deploy this app in a EKS Kubernetes Cluster, check the [README file](./kubernetes/README.md) in the [kubernetes directory](./kubernetes).
 
 ### Aditional tips:
 
