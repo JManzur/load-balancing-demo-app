@@ -56,8 +56,12 @@ Delete the changes:
 kustomize build . | kubectl delete -f -
 ```
 
+⚠️ NOTE: This deployment uses a LoadBalancer service type, so it will create a PUBLIC AWS ELB and you will be charged for it, also your eks cluster needs to have the correct permissions to create the ELB, and the ELB controller needs to be installed in your cluster.
+
 ### Documentation:
 
 - [Kustomize](https://kustomize.io/)
 - [Install Kustomize](https://kubectl.docs.kubernetes.io/installation/kustomize/)
 - [Kustomize edit set image](https://github.com/kubernetes-sigs/kustomize/blob/master/examples/image.md)
+- [Install the AWS Load Balancer Controller add-on using Kubernetes Manifests](https://docs.aws.amazon.com/eks/latest/userguide/lbc-manifest.html)
+- [Application load balancing on Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html)

@@ -16,7 +16,13 @@ This app also includes a status page to test healthcheck, and a feature to show 
 | WSL2 Ubuntu 20.04 | Docker | 25.0.3  |
 | WSL2 Ubuntu 20.04 | Python | 3.10.12 |
 
-## Run App.py Locally
+## Pulling and Running the app from my Docker Hub:
+
+```bash
+docker run --restart=always -d -p 8882:8882 --env APP_VERSION=v2.0 --name DEMO-LB-APP jmanzur/demo-lb-app:latest
+```
+
+## Running the app locally (No Docker):
 
 Clone the project
 
@@ -24,27 +30,24 @@ Clone the project
 git clone https://github.com/JManzur/load-balancing-demo-app.git
 ```
 
-Go to the project directory
-
+Go to the project directory:
 ```bash
 cd load-balancing-demo-app
 ```
 
 If you wish to test the python app locally, install the requirements:
-
 ```bash
   pip3 install -r requirements.txt
 ```
 
-Start the server
-
+Start the server:
 ```bash
   python3 app.py
 ```
 
 Access the web app:
 
-http://127.0.0.1:8882/
+[http://127.0.0.1:8882/](http://127.0.0.1:8882/)
 
 And you will see something like this:
 
@@ -52,7 +55,7 @@ And you will see something like this:
 
 ## Test the healthcheck status page
 
-In order to test the healthcheck status page, you can access http://127.0.0.1:8882/status in a browser or perform a curl like this:
+In order to test the healthcheck status page, you can access [http://127.0.0.1:8882/status](http://127.0.0.1:8882/status) in a browser or perform a curl like this:
 
 ```bash
 curl -s http://127.0.0.1:8882/status
@@ -71,15 +74,12 @@ curl -s http://127.0.0.1:8882/status | jq -r
 ```
 ![App Screenshot](./images/lb_demo_app_status.png)
 
-## Build the Docker image 
+## Build and Run the Docker image Locally:
 
 Form the project directory run:
-
 ```bash
 docker build -t demo-lb-app .
 ```
-
-## Run the Docker image Locally
 
 After building the image if you wish to test it locally run the following command.
 
@@ -90,7 +90,7 @@ docker image ls
 
 Run the image
 ```bash
-docker run -d -p 8882:8882 --name DEMO-LB-APP {IMAGE_ID}
+docker run --restart=always -d -p 8882:8882 --env APP_VERSION=v2.0 --name DEMO-LB-APP <IMAGE_ID>
 ```
 
 :bulb: **TIP**: You can also use the `rebuild_image.sh` script located in the scripts directory to build and run the image.
@@ -120,5 +120,3 @@ while true; do echo -n; curl -s http://<your-ingress-endpoint>/status | jq -r; s
 ## Documentation
 
 - [Python - Docker Official Images](https://hub.docker.com/_/python)
-- [Install the AWS Load Balancer Controller add-on using Kubernetes Manifests](https://docs.aws.amazon.com/eks/latest/userguide/lbc-manifest.html)
-- [Application load balancing on Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html)
