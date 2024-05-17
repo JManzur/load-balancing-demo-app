@@ -8,8 +8,28 @@ To deploy the application is strucutred to be deployed using Kustomize. Kustomiz
 Without any changes, and without using Kustomize, you can deploy the application using the following command:
 
 ```bash
-kubectl apply -f .
+kubectl apply -k .
 ```
+To get the LoadBalancer URL, you can use the following command:
+
+```bash
+kubectl get ingress/ingress-demo-lb-app -n demo-lb-app
+```
+
+Open the URL in a browser or use curl to check the status of the application:
+
+```bash
+curl -s http://<LOAD_BALANCER_URL>/status | jq -r
+```
+
+💡Use the following one-liner to get the LoadBalancer URL and check the status of the application in a loop:
+
+```bash
+INGRESS_URL=$(kubectl get ingress/ingress-demo-lb-app -n demo-lb-app -o jsonpath='{.status.loadBalancer.ingress[0].hostname}') && while true; do echo -n; curl -s http://$INGRESS_URL/status | jq -r; sleep 1; done
+```
+
+⚠️ **NOTE**: This deployment uses a LoadBalancer service type, so it will create a **PUBLIC AWS ALB** and you will be charged for it, also your eks cluster needs to have the correct permissions to create the ALB, and the ALB controller needs to be installed in your cluster.
+- [Install the AWS Load Balancer Controller using Kubernetes Manifests](https://docs.aws.amazon.com/eks/latest/userguide/lbc-manifest.html).
 
 ## Using Kustomize:
 
@@ -56,7 +76,16 @@ Delete the changes:
 kustomize build . | kubectl delete -f -
 ```
 
-⚠️ NOTE: This deployment uses a LoadBalancer service type, so it will create a PUBLIC AWS ELB and you will be charged for it, also your eks cluster needs to have the correct permissions to create the ELB, and the ELB controller needs to be installed in your cluster.
+## Troubleshooting Tips:
+
+If after deleting the resources using `kubectl delete -k .` or `kustomize build. | kubectl delete -f -` commands, the namespace is in a "Terminating" state, you can force the namespace to be deleted using the following commands:
+
+```bash
+NAMESPACE=demo-lb-app
+kubectl proxy & kubectl get namespace $NAMESPACE -o json |jq '.spec = {"finalizers":[]}' > temp.json
+curl -k -H "Content-Type: application/json" -X PUT --data-binary @temp.json 127.0.0.1:8001/api/v1/namespaces/$NAMESPACE/finalize
+sleep 5 && rm temp.json
+```
 
 ### Documentation:
 

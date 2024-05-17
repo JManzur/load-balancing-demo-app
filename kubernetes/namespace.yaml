@@ -2,4 +2,4 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: load-balancer-app
+  name: demo-lb-app
