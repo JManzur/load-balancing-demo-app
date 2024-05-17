@@ -97,7 +97,7 @@ kubectl exec -it <POD-NAME> -n demo-lb-app -- /bin/bash
 ### Watching the pods activity:
 
 ```bash
-watch k get pods -n demo-lb-app
+watch kubectl get pods -n demo-lb-app
 ```
 
 ### Documentation:
