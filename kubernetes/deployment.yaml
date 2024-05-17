@@ -19,10 +19,9 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 8882
-        volumeMounts:
-        - name: config
-          mountPath: /config
-      volumes:
-      - name: config
-        configMap:
-          name: lb-app-cm
+        env:
+        - name: APP_VERSION
+          valueFrom:
+            configMapKeyRef:
+              name: lb-app-cm
+              key: APP_VERSION

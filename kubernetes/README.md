@@ -78,6 +78,8 @@ kustomize build . | kubectl delete -f -
 
 ## Troubleshooting Tips:
 
+### Namespace stuck in "Terminating" state:
+
 If after deleting the resources using `kubectl delete -k .` or `kustomize build. | kubectl delete -f -` commands, the namespace is in a "Terminating" state, you can force the namespace to be deleted using the following commands:
 
 ```bash
@@ -85,6 +87,17 @@ NAMESPACE=demo-lb-app
 kubectl proxy & kubectl get namespace $NAMESPACE -o json |jq '.spec = {"finalizers":[]}' > temp.json
 curl -k -H "Content-Type: application/json" -X PUT --data-binary @temp.json 127.0.0.1:8001/api/v1/namespaces/$NAMESPACE/finalize
 sleep 5 && rm temp.json
+```
+### Accessing the pod:
+
+```bash
+kubectl exec -it <POD-NAME> -n demo-lb-app -- /bin/bash
+```
+
+### Watching the pods activity:
+
+```bash
+watch k get pods -n demo-lb-app
 ```
 
 ### Documentation:
@@ -94,3 +107,4 @@ sleep 5 && rm temp.json
 - [Kustomize edit set image](https://github.com/kubernetes-sigs/kustomize/blob/master/examples/image.md)
 - [Install the AWS Load Balancer Controller add-on using Kubernetes Manifests](https://docs.aws.amazon.com/eks/latest/userguide/lbc-manifest.html)
 - [Application load balancing on Amazon EKS](https://docs.aws.amazon.com/eks/latest/userguide/alb-ingress.html)
+- [Install jq](https://jqlang.github.io/jq/download/)

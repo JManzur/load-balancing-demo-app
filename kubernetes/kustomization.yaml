@@ -9,7 +9,7 @@ resources:
 namespace: demo-lb-app
 
 replicas:
-- count: 4
+- count: 2
   name: deployment-demo-lb-app
 
 images:
@@ -19,7 +19,7 @@ images:
 
 configMapGenerator:
 - literals:
-  - APP_VERSION=1.1
+  - APP_VERSION=1.0
   name: lb-app-cm
 
 labels:
