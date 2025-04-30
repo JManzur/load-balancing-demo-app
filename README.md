@@ -1,10 +1,10 @@
 # Load Balancing Demo APP
 
-Why do all demo apps have to be ugly? I don't want any white page with off-center black text. Let's use something prettier!
+Why do all demo apps have to be ugly? I don’t want another white page with off-center black text. Let’s use something prettier!
 
-This is a simple Flask APP that runs in a Docker container and you can use it to test load balancing. The useful part for testing load balancing is that this app returns the hostname of the container it is running on, so you can confirm that your load balancing setup is working.
+This is a simple Flask app that runs in a Docker container, designed to help test load balancing. The key feature for testing load balancing is that the app returns the hostname of the container it’s running on, so you can verify that your setup is distributing traffic correctly.
 
-This app also includes a status page to test healthcheck, and a feature to show the "app version" in the footer, so you can test rolling updates.
+The app also includes a status page for health checks and displays the application version in the footer, which is useful for testing rolling updates. Additionally, it has a SIGTERM handler to gracefully shut down the container when it receives a termination signal; perfect for demonstrating how to properly shut down a container in production scenarios.
 
 > #### :bulb: [Also available on Docker Hub!](https://hub.docker.com/r/jmanzur/demo-lb-app)
 

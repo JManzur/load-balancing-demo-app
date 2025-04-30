@@ -12,13 +12,34 @@ spec:
     metadata:
       labels:
         app.kubernetes.io/name: demo-lb-app
+      annotations:
+        proxy.istio.io/config: |
+          terminationDrainDuration: 120s
     spec:
+      terminationGracePeriodSeconds: 60
       containers:
       - name: demo-lb-app
         image: jmanzur/demo-lb-app:latest
         imagePullPolicy: Always
         ports:
         - containerPort: 8882
+        readinessProbe:
+          httpGet:
+            path: /status
+            port: 8882
+          initialDelaySeconds: 3
+          periodSeconds: 5
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        lifecycle:
+          preStop:
+            exec:
+              command: ["sleep", "60"]
         env:
         - name: APP_VERSION
           valueFrom:
