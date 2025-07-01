@@ -107,11 +107,19 @@ For more information and tips on how to deploy this app in a EKS Kubernetes Clus
 
 ### Aditional tips:
 
-Use a `while` loop to test the load balancing:
+### Use a `while` loop to test the load balancing:
 
 ```bash
 while true; do echo -n; curl -s http://<your-ingress-endpoint>/status | jq -r; sleep 1; done
 ```
+
+### Test Load Balancers stickiness:
+
+```bash
+for i in {1..100}; do curl http://<your-ingress-endpoint>:8882/sticky; sleep 1; done
+```
+
+You should see the same hostname in the response if sticky sessions are working. If stickiness is disabled or the session breaks, you'll hit different backends (with different hostnames).
 
 ## Author
 

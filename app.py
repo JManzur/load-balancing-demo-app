@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 import socket
 from os import getenv
 import signal
@@ -41,6 +41,21 @@ def handle_sigterm(*args):
 
 
 signal.signal(signal.SIGTERM, handle_sigterm)
+
+
+@app.route("/sticky", methods=["GET"])
+def sticky():
+    client_ip = request.remote_addr
+    return (
+        jsonify(
+            Message="Sticky session test",
+            Host=HOSTNAME,
+            AppVersion=APP_VERSION,
+            ClientIP=client_ip
+        ),
+        200,
+        {"ContentType": "application/json"},
+    )
 
 
 @app.route("/", methods=["GET"])
