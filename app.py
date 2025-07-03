@@ -45,7 +45,8 @@ signal.signal(signal.SIGTERM, handle_sigterm)
 
 @app.route("/sticky", methods=["GET"])
 def sticky():
-    client_ip = request.remote_addr
+    forwarded_for = request.headers.get("X-Forwarded-For", "")
+    client_ip = forwarded_for.split(",")[0].strip() if forwarded_for else request.remote_addr
     return (
         jsonify(
             Message="Sticky session test",
