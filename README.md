@@ -121,6 +121,14 @@ for i in {1..100}; do curl http://<your-ingress-endpoint>:8882/sticky; sleep 1; 
 
 You should see the same hostname in the response if sticky sessions are working. If stickiness is disabled or the session breaks, you'll hit different backends (with different hostnames).
 
+### Use the `/stress` endpoint to demostrate autoscaling (CPU Load Simulation)
+
+In the deployment.yaml set the `ENABLE_STRESS` value to `"true"`
+
+```bash
+while true; do echo -n; curl -s http://<your-ingress-endpoint>/stress | jq -r; sleep 1; done
+```
+
 ## Author
 
 - [@JManzur](https://jmanzur.com)

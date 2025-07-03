@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify, request
 import socket
+import math
 from os import getenv
 import signal
 import time
@@ -57,6 +58,25 @@ def sticky():
         200,
         {"ContentType": "application/json"},
     )
+
+
+@app.route('/stress', methods=['GET'])
+def stress():
+    stress_enabled = getenv('ENABLE_STRESS', 'false').lower() == 'true'
+    if not stress_enabled:
+        return jsonify({
+            "Message": "The /stress endpoint is currently disabled.",
+            "Hostname": HOSTNAME
+        }), 200
+
+    x = 0.0001
+    for i in range(1000000):
+        x += math.sqrt(x)
+
+    return jsonify({
+        "Message": "Calculation completed!",
+        "Hostname": HOSTNAME
+    }), 200
 
 
 @app.route("/", methods=["GET"])

@@ -41,6 +41,8 @@ spec:
             exec:
               command: ["sleep", "60"]
         env:
+        - name: ENABLE_STRESS
+          value: "false"
         - name: APP_VERSION
           valueFrom:
             configMapKeyRef:
