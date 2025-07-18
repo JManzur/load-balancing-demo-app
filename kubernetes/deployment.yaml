@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: deployment-demo-lb-app
+  name: demo-lb-app
 spec:
   selector:
     matchLabels:

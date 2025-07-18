@@ -10,7 +10,7 @@ namespace: demo-lb-app
 
 replicas:
 - count: 2
-  name: deployment-demo-lb-app
+  name: demo-lb-app
 
 images:
 - name: jmanzur/demo-lb-app:latest
@@ -19,7 +19,7 @@ images:
 
 configMapGenerator:
 - literals:
-  - APP_VERSION=v1.0.1
+  - APP_VERSION=v1.0.0
   name: lb-app-cm
 
 labels:

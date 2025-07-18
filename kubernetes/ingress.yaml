@@ -4,8 +4,14 @@ kind: Ingress
 metadata:
   name: ingress-demo-lb-app
   annotations:
+    alb.ingress.kubernetes.io/load-balancer-name: demo-lb-app
+    alb.ingress.kubernetes.io/group.name: demo-lb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/load-balancer-attributes: routing.http.xff_header_processing.mode=append
+    # Remove the following line if you do not want sticky sessions
+    alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stickiness.lb_cookie.duration_seconds=60
+
 spec:
   ingressClassName: alb
   rules:
@@ -15,6 +21,6 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: service-demo-lb-app
+              name: demo-lb-app
               port:
                 number: 80
