@@ -24,9 +24,8 @@ ready = True
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 handler = logging.StreamHandler(sys.stdout)
-formatter = logging.Formatter(
-    '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
-)
+werkzeug_format = '%(remote_addr)s - [%(asctime)s] "%(request_method)s %(path)s %(protocol)s" %(status)s'
+formatter = logging.Formatter(werkzeug_format, datefmt='%d/%b/%Y %H:%M:%S')
 handler.setFormatter(formatter)
 if not logger.handlers:
     logger.addHandler(handler)
@@ -62,7 +61,16 @@ def sticky():
     forwarded_for = request.headers.get("X-Forwarded-For", "")
     client_ip = forwarded_for.split(",")[0].strip() if forwarded_for else request.remote_addr
 
-    logger.info(f"Request from client IP: {client_ip} to /sticky")
+    log_data = {
+        'remote_addr': client_ip,
+        'asctime': time.strftime("%d/%b/%Y %H:%M:%S"),
+        'request_method': request.method,
+        'path': request.path,
+        'protocol': request.environ.get('SERVER_PROTOCOL'),
+        'status': 200,
+    }
+
+    logger.info(werkzeug_format % log_data)
 
     return (
         jsonify(
