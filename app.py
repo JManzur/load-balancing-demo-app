@@ -4,6 +4,8 @@ import math
 from os import getenv
 import signal
 import time
+import logging
+import sys
 
 if len(getenv("APP_VERSION")) == 0:
     APP_VERSION = "v1.0.0"
@@ -17,6 +19,17 @@ else:
 
 app = Flask(__name__, static_url_path="/static")
 ready = True
+
+# Create a custom logger instance
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+handler = logging.StreamHandler(sys.stdout)
+formatter = logging.Formatter(
+    '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+)
+handler.setFormatter(formatter)
+if not logger.handlers:
+    logger.addHandler(handler)
 
 
 @app.route("/status", methods=["GET"])
@@ -48,6 +61,9 @@ signal.signal(signal.SIGTERM, handle_sigterm)
 def sticky():
     forwarded_for = request.headers.get("X-Forwarded-For", "")
     client_ip = forwarded_for.split(",")[0].strip() if forwarded_for else request.remote_addr
+
+    logger.info(f"Request from client IP: {client_ip} to /sticky")
+
     return (
         jsonify(
             Message="Sticky session test",
