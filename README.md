@@ -35,14 +35,22 @@ Go to the project directory:
 cd load-balancing-demo-app
 ```
 
-If you wish to test the python app locally, install the requirements:
+Proceed to create a virtual environment:
 ```bash
-  pip3 install -r requirements.txt
+python3 -m venv venv
+```
+
+```bash
+source venv/bin/activate
+```
+
+```bash
+venv/bin/pip3 install -r requirements.txt 
 ```
 
 Start the server:
 ```bash
-  python3 app.py
+python3 app.py
 ```
 
 Access the web app:

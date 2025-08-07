@@ -7,15 +7,8 @@ import time
 import logging
 import sys
 
-if len(getenv("APP_VERSION")) == 0:
-    APP_VERSION = "v1.0.0"
-else:
-    APP_VERSION = getenv("APP_VERSION")
-
-if len(getenv("HOSTNAME")) == 0:
-    HOSTNAME = socket.gethostname()
-else:
-    HOSTNAME = getenv("HOSTNAME")
+APP_VERSION = getenv("APP_VERSION", "v1.0.0")
+HOSTNAME = getenv("HOSTNAME", socket.gethostname())
 
 app = Flask(__name__, static_url_path="/static")
 ready = True
@@ -24,8 +17,9 @@ ready = True
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 handler = logging.StreamHandler(sys.stdout)
-werkzeug_format = '%(remote_addr)s - [%(asctime)s] "%(request_method)s %(path)s %(protocol)s" %(status)s'
-formatter = logging.Formatter(werkzeug_format, datefmt='%d/%b/%Y %H:%M:%S')
+formatter = logging.Formatter(
+    '[%(asctime)s] %(levelname)s in %(module)s: %(message)s'
+)
 handler.setFormatter(formatter)
 if not logger.handlers:
     logger.addHandler(handler)
@@ -61,6 +55,7 @@ def sticky():
     forwarded_for = request.headers.get("X-Forwarded-For", "")
     client_ip = forwarded_for.split(",")[0].strip() if forwarded_for else request.remote_addr
 
+    werkzeug_format = '%(remote_addr)s - [%(asctime)s] "%(request_method)s %(path)s %(protocol)s" %(status)s'
     log_data = {
         'remote_addr': client_ip,
         'asctime': time.strftime("%d/%b/%Y %H:%M:%S"),
@@ -70,7 +65,7 @@ def sticky():
         'status': 200,
     }
 
-    logger.info(werkzeug_format % log_data)
+    print(werkzeug_format % log_data, file=sys.stdout)
 
     return (
         jsonify(
