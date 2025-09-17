@@ -20,6 +20,7 @@ images:
 configMapGenerator:
 - literals:
   - APP_VERSION=v1.0.0
+  - ENABLE_STRESS=false
   name: lb-app-cm
 
 labels:

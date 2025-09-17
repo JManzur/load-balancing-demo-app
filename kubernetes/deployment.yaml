@@ -41,7 +41,10 @@ spec:
               command: ["sleep", "60"]
         env:
         - name: ENABLE_STRESS
-          value: "false"
+          valueFrom:
+            configMapKeyRef:
+              name: lb-app-cm
+              key: ENABLE_STRESS
         - name: APP_VERSION
           valueFrom:
             configMapKeyRef:
