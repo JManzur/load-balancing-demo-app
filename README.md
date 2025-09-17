@@ -118,7 +118,7 @@ For more information and tips on how to deploy this app in a EKS Kubernetes Clus
 ### Use a `while` loop to test the load balancing:
 
 ```bash
-while true; do echo -n; curl -s http://<your-ingress-endpoint>/status | jq -r; sleep 1; done
+while true; do echo -n; curl -s http://<alb-dns>/status | jq -r; sleep 1; done
 ```
 
 ### Test Load Balancers stickiness:
@@ -132,14 +132,15 @@ alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stick
 Then, capture the cookie using `curl -c` option and use it in subsequent requests with `curl -b` option.
 ```bash
 # Get the cookie
-curl -c cookies.txt http://<your-ingress-endpoint>
-for i in {1..100}; do curl -b cookies.txt http://<your-ingress-endpoint>/sticky; done
+curl -c cookies.txt http://<alb-dns>
+for i in {1..100}; do curl -b cookies.txt http://<alb-dns>/sticky; done
 ```
 
-Alternatively, you can use the provided `sticky_test.sh` script to automate this process. Make sure to replace `<your-ingress-endpoint>` with your actual ALB DNS name.
+Alternatively, you can use the provided `sticky_test.sh` script to automate this process. Make sure to replace `<alb-dns>` with your actual ALB DNS name.
 ```bash
 chmod +x sticky_test.sh
-./sticky_test.sh <your-ingress-endpoint> [duration_in_seconds]
+./sticky_test.sh <alb-dns> [duration_in_seconds]
+# Example: ./sticky_test.sh demo-lb-app-0000000000.us-east-1.elb.amazonaws.com 60
 ```
 
 You should see the same hostname in the response if sticky sessions are working. If stickiness is disabled or the session breaks, you'll hit different backends (with different hostnames).
@@ -149,7 +150,7 @@ You should see the same hostname in the response if sticky sessions are working.
 In the deployment.yaml set the `ENABLE_STRESS` value to `"true"`
 
 ```bash
-while true; do echo -n; curl -s http://<your-ingress-endpoint>/stress | jq -r; sleep 1; done
+while true; do echo -n; curl -s http://<alb-dns>/stress | jq -r; sleep 1; done
 ```
 
 ## Author
