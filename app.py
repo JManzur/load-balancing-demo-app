@@ -8,7 +8,11 @@ import logging
 import sys
 
 APP_VERSION = getenv("APP_VERSION", "v1.0.0")
-HOSTNAME = getenv("HOSTNAME", socket.gethostname())
+
+if len(getenv("HOSTNAME")) == 0:
+    HOSTNAME = socket.gethostname()
+else:
+    HOSTNAME = getenv("HOSTNAME")
 
 app = Flask(__name__, static_url_path="/static")
 ready = True
