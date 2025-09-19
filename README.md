@@ -4,17 +4,15 @@ Why do all demo apps have to be ugly? I don’t want another white page with off
 
 This is a simple Flask app that runs in a Docker container, designed to help test load balancing. The key feature for testing load balancing is that the app returns the hostname of the container it’s running on, so you can verify that your setup is distributing traffic correctly.
 
-The app also includes a status page for health checks and displays the application version in the footer, which is useful for testing rolling updates. Additionally, it has a SIGTERM handler to gracefully shut down the container when it receives a termination signal; perfect for demonstrating how to properly shut down a container in production scenarios.
+**Key features**:
+- Home Page (`/`): Displays the hostname of the container and the application version.
+- Status Page (`/status`): Provides a JSON response with the hostname, the http status code, and a message indicating the app is running.
+- Graceful Shutdown: Handles SIGTERM signals to allow for clean shutdowns.
+- Stress Endpoint (`/stress`): Simulates CPU load for testing autoscaling scenarios.
+- Sticky Session Endpoint (`/sticky`): Helps test load balancer stickiness by returning the hostname and client source IP.
+
 
 > #### :bulb: [Also available on Docker Hub!](https://hub.docker.com/r/jmanzur/demo-lb-app)
-
-
-## Tested with: 
-
-| Environment | Application | Version  |
-| ----------------- |-----------|---------|
-| WSL2 Ubuntu 20.04 | Docker | 25.0.3  |
-| WSL2 Ubuntu 20.04 | Python | 3.10.12 |
 
 ## Pulling and Running the app from my Docker Hub:
 
@@ -121,7 +119,7 @@ For more information and tips on how to deploy this app in a EKS Kubernetes Clus
 while true; do echo -n; curl -s http://<alb-dns>/status | jq -r; sleep 1; done
 ```
 
-### Test Load Balancers stickiness:
+### Test Load Balancers cookie based stickiness:
 
 To test sticky sessions with an AWS ALB Ingress Controller, make sure you have the following annotation in your `ingress.yaml` file:
 
@@ -131,8 +129,9 @@ alb.ingress.kubernetes.io/target-group-attributes: stickiness.enabled=true,stick
 
 Then, capture the cookie using `curl -c` option and use it in subsequent requests with `curl -b` option.
 ```bash
-# Get the cookie
+# Get the cookies
 curl -c cookies.txt http://<alb-dns>
+# Use the cookies in subsequent requests:
 for i in {1..100}; do curl -b cookies.txt http://<alb-dns>/sticky; done
 ```
 
@@ -145,12 +144,54 @@ chmod +x sticky_test.sh
 
 You should see the same hostname in the response if sticky sessions are working. If stickiness is disabled or the session breaks, you'll hit different backends (with different hostnames).
 
+### Test Load Balancers Source IP based stickiness:
+
+To test sticky sessions based on source IP with an AWS ALB Ingress Controller, we need to use a Network Load Balancer (NLB) instead of an Application Load Balancer (ALB). To do this, we need to comment or delete the `ingress.yaml` file and replace the contents of the `service.yaml` file with the following configuration:
+
+```yaml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: demo-lb-app
+  labels:
+    app: demo-lb-app
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: external
+    service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
+    service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+    service.beta.kubernetes.io/aws-load-balancer-name: demo-lb-app
+    # Sticky sessions and Preserve Source IP
+    service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: stickiness.enabled=true,stickiness.type=source_ip,preserve_client_ip.enabled=true
+spec:
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: demo-lb-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8882
+  loadBalancerClass: service.k8s.aws/nlb
+```
+
+To test this with `curl`, we need to use the `--keepalive` option to maintain the same TCP connection:
+
+```bash
+curl -s --keepalive $(for i in {1..100}; do echo -n "--url http://<alb-dns>/sticky "; done)
+```
+
 ### Use the `/stress` endpoint to demostrate autoscaling (CPU Load Simulation)
 
-In the deployment.yaml set the `ENABLE_STRESS` value to `"true"`
+In the `kustomization.yaml` set the `ENABLE_STRESS` value to `true`, apply the manifests, **open at least 4 terminal windows** and run the following command in each of them:
 
 ```bash
 while true; do echo -n; curl -s http://<alb-dns>/stress | jq -r; sleep 1; done
+```
+
+Monitor the average CPU utilization of the pods by running:
+
+```bash
+kubectl get hpa demo-lb-app-hpa -w
 ```
 
 ## Author
@@ -160,3 +201,8 @@ while true; do echo -n; curl -s http://<alb-dns>/stress | jq -r; sleep 1; done
 ## Documentation
 
 - [Python - Docker Official Images](https://hub.docker.com/_/python)
+- [AWS Load Balancer Controller](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.13/)
+- [ALB Ingress Annotations](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.13/guide/ingress/annotations/)
+- [NLB Service Annotations](https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.13/guide/service/annotations/)
+- [Target groups for your Network Load Balancers](https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html)
+- [Target groups for your Application Load Balancers](https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html)
